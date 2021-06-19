@@ -4,241 +4,194 @@
 * GitHub: https://www.github.com/Xtrendence
 */
 class XNotify {
-	constructor(position) {
-		this.position = this.empty(position) ? "TopRight" : position;
+  constructor (position) {
+    this.position = this.empty(position) ? 'TopRight' : position
 
-		this.defaults = {
-			width: "250px",
-			borderRadius: "10px",
-			duration: 5000,
-			color: "rgb(255,255,255)",
-			success: {
-				title: "Success Notification",
-				description: "Whatever you did, it worked.",
-				background: "rgb(40,200,80)"
-			},
-			error: {
-				title: "Error Notification",
-				description: "That didn't work out, did it?",
-				background: "rgb(230,50,50)"
-			},
-			alert: {
-				title: "Alert Notification",
-				description: "This is probably important...",
-				background: "rgb(240,180,10)"
-			},
-			info: {
-				title: "Info Notification",
-				description: "Just so you know...",
-				background: "rgb(170,80,220)"
-			}
-		};
-	}
+    this.defaults = {
+      duration: 5000,
+      success: {
+        title: 'Success Notification',
+        description: 'Whatever you did, it worked.'
+      },
+      error: {
+        title: 'Error Notification',
+        description: 'That didn\'t work out, did it?'
+      },
+      alert: {
+        title: 'Alert Notification',
+        description: 'This is probably important...'
+      },
+      info: {
+        title: 'Info Notification',
+        description: 'Just so you know...'
+      }
+    }
+  }
 
-	setOptions(options, type) {
-		this.width = this.empty(options.width) ? this.defaults.width : options.width;
+  setOptions (options, type) {
+    this.width = 'width' in options ? options.width : this.defaults.width
 
-		this.borderRadius = this.empty(options.borderRadius) ? this.defaults.borderRadius : options.borderRadius;
+    this.title = 'title' in options ? options.title : this.defaults[type].title
 
-		this.title = this.empty(options.title) ? this.defaults[type].title : options.title;
+    this.description = 'description' in options ? options.description : this.defaults[type].description
 
-		this.description = this.empty(options.description) ? this.defaults[type].description : options.description;
+    this.duration = 'duration' in options ? options.duration : this.defaults.duration
 
-		this.duration = this.empty(options.duration) ? this.defaults.duration : options.duration;
+    this.notificationClass = type
+  }
 
-		this.background = this.empty(options.background) ? this.defaults[type].background : options.background;
+  success (options) {
+    this.setOptions(options, 'success')
+    this.showNotification(this.createElement())
+  }
 
-		this.color = this.empty(options.color) ? this.defaults.color : options.color;
-	}
+  error (options) {
+    this.setOptions(options, 'error')
+    this.showNotification(this.createElement())
+  }
 
-	success(options) {
-		this.setOptions(options, "success");
-		let element = this.createElement();
-		this.showNotification(element);
-	}
+  alert (options) {
+    this.setOptions(options, 'alert')
+    this.showNotification(this.createElement())
+  }
 
-	error(options) {
-		this.setOptions(options, "error");
-		let element = this.createElement();
-		this.showNotification(element);
-	}
+  info (options) {
+    this.setOptions(options, 'info')
+    this.showNotification(this.createElement())
+  }
 
-	alert(options) {
-		this.setOptions(options, "alert");
-		let element = this.createElement();
-		this.showNotification(element);
-	}
+  createElement () {
+    if (!document.getElementById('x-notify-container')) {
+      const body = document.getElementsByTagName('body')[0]
 
-	info(options) {
-		this.setOptions(options, "info");
-		let element = this.createElement();
-		this.showNotification(element);
-	}
+      const container = document.createElement('div')
+      container.id = 'x-notify-container'
+      container.classList.add(this.position)
 
-	createElement() {
-		if(!document.getElementById("x-notify-container")) {
-			let body = document.getElementsByTagName("body")[0];
+      body.appendChild(container)
+    }
 
-			let height = "calc(100% - 20px)";
-			let paddingRight = "20px";
-			let paddingLeft = "0";
-			let top = "0";
-			let right = "0";
-			let bottom = "auto";
-			let left = "auto";
+    const row = document.createElement('div')
+    row.id = this.generateID()
+    row.classList.add(this.position)
 
-			switch(this.position) {
-				case "BottomRight":
-					height = "auto";
-					top = "auto";
-					bottom = "0";
-					break;
-				case "BottomLeft":
-					height = "auto";
-					paddingRight = "0";
-					paddingLeft = "20px";
-					top = "auto";
-					right = "auto";
-					bottom = "0";
-					left = "0";
-					break;
-				case "TopLeft":
-					paddingRight = "0";
-					paddingLeft = "20px";
-					right = "auto";
-					left = "0";
-					break;
-			}
+    const notification = document.createElement('div')
+    notification.classList.add('x-notification')
+    notification.classList.add(this.notificationClass)
 
-			let container = document.createElement("div");
-			container.id = "x-notify-container";
-			container.style = 'position:fixed; z-index:999; width:calc(' + this.width + ' + 70px); height:' + height + '; pointer-events:none; overflow-x:hidden; overflow-y:auto; -webkit-overflow-scrolling:touch; scroll-behavior:smooth; scrollbar-width:none; padding-top:20px; padding-right:' + paddingRight + '; padding-left:' + paddingLeft + '; top:' + top + '; right:' + right + '; bottom:' + bottom + '; left:' + left + ';';
-			
-			body.appendChild(container);
-		}
+    notification.innerHTML = '<span class="title" class="' + this.notificationClass + '">' + this.title + '</span>' +
+    '<span class="description">' + this.description + '</span>'
 
-		let align = (this.position === "TopRight" || this.position === "BottomRight") ? "right" : "left";
-		
-		let row = document.createElement("div");
-		row.id = this.generateID();
-		row.style = 'display:block; padding:0 0 20px 0; text-align:' + align + '; width:100%;';
+    row.append(notification)
 
-		let notification = document.createElement("div");
-		notification.classList.add("x-notification");
-		notification.style = 'background:' + this.background + '; color:' + this.color + '; width:' + this.width + '; border-radius:' + this.borderRadius + '; padding:10px 12px 12px 12px; font-family:"Helvetica Neue", "Lucida Grande", "Arial", "Verdana", "Tahoma", sans-serif; display:inline-block; text-align:left; opacity:0; pointer-events:auto; -webkit-user-select:none; -khtml-user-select:none; -moz-user-select:none; -ms-user-select:none; user-select:none; outline:none;';
+    return row
+  }
 
-		notification.innerHTML = '<span style="font-size:18px; font-weight:bold; color:' + this.color + '; display:block; line-height:25px;">' + this.title + '</span><span style="font-size:16px; color:' + this.color + '; display:block; margin-top:5px; line-height:25px;">' + this.description + '</span>';
+  showNotification (element) {
+    const container = document.getElementById('x-notify-container')
 
-		row.append(notification);
+    const notification = element.getElementsByClassName('x-notification')[0]
 
-		return row;
-	}
+    if (this.position === 'BottomRight' || this.position === 'BottomLeft') {
+      container.append(element)
+      if (container.scrollHeight > window.innerHeight) {
+        container.style.height = 'calc(100% - 20px)'
+      }
+      container.scrollTo(0, container.scrollHeight)
+    } else {
+      container.prepend(element)
+    }
 
-	showNotification(element) {
-		let container = document.getElementById("x-notify-container");
+    let opacity = 0.05
+    const animation = setInterval(() => {
+      opacity += 0.05
+      notification.style.opacity = opacity
+      if (opacity >= 1) {
+        notification.style.opacity = 1
+        clearInterval(animation)
+      }
+    }, 10)
 
-		let notification = element.getElementsByClassName("x-notification")[0];
+    setTimeout(() => {
+      this.hideNotification(element)
+    }, this.duration)
+  }
 
-		if(this.position === "BottomRight" || this.position === "BottomLeft") {
-			container.append(element);
-			if(container.scrollHeight > window.innerHeight) {
-				container.style.height = "calc(100% - 20px)";
-			}
-			container.scrollTo(0, container.scrollHeight);
-		} else {
-			container.prepend(element);
-		}
+  hideNotification (element) {
+    const container = document.getElementById('x-notify-container')
 
-		let opacity = 0.05;
-		let animation = setInterval(() => {
-			opacity += 0.05;
-			notification.style.opacity = opacity;
-			if(opacity >= 1) {
-				notification.style.opacity = 1;
-				clearInterval(animation);
-			}
-		}, 10);
+    const notification = element.getElementsByClassName('x-notification')[0]
 
-		setTimeout(() => {
-			this.hideNotification(element);
-		}, this.duration);
-	}
+    let opacity = 1
+    const animation = setInterval(() => {
+      opacity -= 0.05
+      notification.style.opacity = opacity
+      if (opacity <= 0) {
+        element.remove()
+        clearInterval(animation)
+      }
+    }, 10)
 
-	hideNotification(element) {
-		let container = document.getElementById("x-notify-container");
+    if (container.scrollHeight <= window.innerHeight) {
+      container.style.height = 'auto'
+    }
 
-		let notification = element.getElementsByClassName("x-notification")[0];
+    if (this.empty(container.innerHTML)) {
+      container.remove()
+    }
+  }
 
-		let opacity = 1;
-		let animation = setInterval(() => {
-			opacity -= 0.05;
-			notification.style.opacity = opacity;
-			if(opacity <= 0) {
-				element.remove();
-				clearInterval(animation);
-			}
-		}, 10);
+  clear () {
+    const container = document.getElementById('x-notify-container')
+    const notifications = container.getElementsByClassName('x-notification')
 
-		if(container.scrollHeight <= window.innerHeight) {
-			container.style.height = "auto";
-		}
+    for (let i = 0; i < notifications.length; i++) {
+      this.hideNotification(notifications[i])
+    }
+  }
 
-		if(this.empty(container.innerHTML)) {
-			container.remove();
-		}
-	}
+  generateID () {
+    let id = this.epoch() + '-' + this.shuffle(this.epoch())
 
-	clear() {
-		let container = document.getElementById("x-notify-container");
-		let notifications = container.getElementsByClassName("x-notification");
+    if (this.empty(document.getElementById('x-notify-container').innerHTML)) {
+      return id
+    }
 
-		for(let i = 0; i < notifications.length; i++) {
-			this.hideNotification(notifications[i]);
-		}
-	}
+    let invalid = true
 
-	generateID() {
-		let id = this.epoch() + "-" + this.shuffle(this.epoch());
+    while (invalid) {
+      if (document.getElementById(id)) {
+        id = this.epoch() + '-' + this.shuffle(this.epoch())
+      } else {
+        invalid = false
+        break
+      }
+    }
 
-		if(this.empty(document.getElementById("x-notify-container").innerHTML)) {
-			return id;
-		}
+    return id
+  }
 
-		let invalid = true;
+  shuffle (string) {
+    const parts = string.toString().split('')
+    for (let i = parts.length; i > 0;) {
+      const random = parseInt(Math.random() * i)
+      const temp = parts[--i]
+      parts[i] = parts[random]
+      parts[random] = temp
+    }
+    return parts.join('')
+  }
 
-		while(invalid) {
-			if(document.getElementById(id)) {
-				id = this.epoch() + "-" + this.shuffle(this.epoch());
-			} else {
-				invalid = false;
-				break;
-			}
-		}
+  epoch () {
+    const date = new Date()
+    const time = Math.round(date.getTime() / 1000)
+    return time
+  }
 
-		return id;
-	}
-
-	shuffle(string) {
-		let parts = string.toString().split("");
-		for(let i = parts.length; i > 0;) {
-			let random = parseInt(Math.random() * i);
-			let temp = parts[--i];
-			parts[i] = parts[random];
-			parts[random] = temp;
-		}
-		return parts.join("");
-	}
-
-	epoch() {
-		var date = new Date();
-		var time = Math.round(date.getTime() / 1000);
-		return time;
-	}
-
-	empty(value) {
-		if (value === null || typeof value === "undefined" || value.toString().trim() === "") {
-			return true;
-		}
-		return false;
-	}
+  empty (value) {
+    if (value === null || typeof value === 'undefined' || value.toString().trim() === '') {
+      return true
+    }
+    return false
+  }
 }

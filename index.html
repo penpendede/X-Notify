@@ -4,6 +4,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<title>Demo</title>
 		<script src="./x-notify.js"></script>
+		<link rel="stylesheet" href="x-notify.css" type="text/css">
 		<style>
 			body {
 				margin:0;
@@ -48,18 +49,16 @@
 				let info = document.getElementById("info");
 
 				success.addEventListener("click", () => {
-					Notify.success({ 
-						title: "A Successful Event", 
-						description: "The description of a successful event.", 
-						duration: 4000
+					Notify.success({
+						title: "A Successful Event",
+						description: "The description of a successful event."
 					});
 				});
 
 				error.addEventListener("click", () => {
 					Notify.error({
 						title: "Some Error",
-						description: "Description of said error.",
-						duration: 4000
+						description: "Description of said error."
 					});
 				});
 
@@ -67,27 +66,13 @@
 					Notify.alert({
 						title: "Just a Warning",
 						description: "Description of the alert or warning.",
-						duration: 4000
 					});
 				});
 
 				info.addEventListener("click", () => {
 					Notify.info({
 						title: "Just Some Info",
-						description: "Longer version of the information.",
-						duration: 4000
-					});
-				});
-
-				custom.addEventListener("click", () => {
-					Notify.info({
-						width: "300px",
-						borderRadius: "4px",
-						title: "Customized Notification",
-						description: "Description of the notification.",
-						duration: 10000,
-						background: "rgb(0,0,30)",
-						color: "rgb(0,200,255)"
+						description: "Longer version of the information."
 					});
 				});
 			});
@@ -99,7 +84,6 @@
 			<button id="error">Error</button>
 			<button id="alert">Alert</button>
 			<button id="info">Info</button>
-			<button id="custom">Custom</button>
 		</div>
 	</body>
 </html>

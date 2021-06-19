@@ -1,0 +1,105 @@
+.x-notification {
+  border-radius: 10px;
+  display: inline-block;
+  font-family: 'Helvetica Neue', 'Lucida Grande', Arial, Verdana, Tahoma, sans-serif;
+  opacity: 0;
+  outline: none;
+  padding: 10px 12px 12px 12px;
+  pointer-events: auto;
+  text-align: left;
+  user-select: none;
+  width: 250px;
+
+  &.success {
+    background: rgb(224, 255, 224);
+    border: rgb(0, 192, 0) 1px solid;
+  }
+
+  &.error {
+    background: rgb(255, 208, 208);
+    border: rgb(192, 0, 0) 1px solid;
+  }
+
+  &.alert {
+    background: rgb(255, 255, 192);
+    border: rgb(208, 208, 0) 1px solid;
+  }
+
+  &.info {
+    background: rgb(240, 240, 240);
+    border: rgb(192, 192, 192) 1px solid;
+  }
+}
+
+#x-notify-container {
+  bottom: auto;
+  height: calc(100% - 20px);
+  left: auto;
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding-left: 0;
+  padding-right: 20px;
+  padding-top: 20px;
+  pointer-events: none;
+  position: fixed;
+  right: 0;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  top: 0;
+  width: 320px;
+  z-index: 999;
+
+  &.BottomRight {
+    height: auto;
+    top: auto;
+    bottom: 0;
+  }
+
+  &.BottomLeft {
+    bottom: 0;
+    height: auto;
+    left: 0;
+    padding-left: 20px;
+    padding-right: 0;
+    right: auto;
+    top: auto;
+  }
+
+  &.TopLeft {
+    left: 0;
+    padding-left: 20px;
+    padding-right: 0;
+    right: auto;
+  }
+
+  &>div {
+    display: block;
+    padding: 0 0 20px 0;
+    text-align: left;
+    width: 100%;
+
+    &.TopRight {
+      text-align: right;
+    }
+
+    &.bottomRight {
+      text-align: right
+    }
+
+    .title {
+      color: black;
+      display: block;
+      font-size: 18px;
+      font-weight: bold;
+      line-height: 25px;
+    }
+
+    .description {
+      color: black;
+      display: block;
+      font-size: 16px;
+      line-height: 25px;
+      margin-top: 5px;
+    }
+  }
+}
