@@ -5,7 +5,7 @@
 */
 class XNotify {
   constructor (position) {
-    this.position = this.empty(position) ? 'TopRight' : position
+    this.position = position || 'TopRight'
 
     this.defaults = {
       duration: 5000,
@@ -29,15 +29,16 @@ class XNotify {
   }
 
   setOptions (options, type) {
-    this.width = 'width' in options ? options.width : this.defaults.width
-
-    this.title = 'title' in options ? options.title : this.defaults[type].title
-
-    this.description = 'description' in options ? options.description : this.defaults[type].description
-
-    this.duration = 'duration' in options ? options.duration : this.defaults.duration
-
-    this.notificationClass = type
+    ['width', 'title', 'description', 'duration'].forEach(name => {
+      if (name in options) {
+        this[name] = options[name]
+      } else if (type in this.defaults && name in this.defaults[type]) {
+        this[name] = this.defaults[type][name]
+      } else {
+        this[name] = this.defaults[name]
+      }
+    })
+    this.type = type || 'info'
   }
 
   success (options) {
@@ -72,15 +73,21 @@ class XNotify {
     }
 
     const row = document.createElement('div')
-    row.id = this.generateID()
+    row.id = this.uuidv4()
     row.classList.add(this.position)
 
     const notification = document.createElement('div')
     notification.classList.add('x-notification')
-    notification.classList.add(this.notificationClass)
+    notification.classList.add(this.type)
 
-    notification.innerHTML = '<span class="title" class="' + this.notificationClass + '">' + this.title + '</span>' +
-    '<span class="description">' + this.description + '</span>'
+    notification.innerHTML = [
+      '<span class="title" class="' + this.type + '">',
+      this.title,
+      '</span>',
+      '<span class="description">',
+      this.description,
+      '</span>'
+    ].join('')
 
     row.append(notification)
 
@@ -92,7 +99,7 @@ class XNotify {
 
     const notification = element.getElementsByClassName('x-notification')[0]
 
-    if (this.position === 'BottomRight' || this.position === 'BottomLeft') {
+    if (['BottomRight', 'BottomLeft'].indexOf(this.position) > -1) {
       container.append(element)
       if (container.scrollHeight > window.innerHeight) {
         container.style.height = 'calc(100% - 20px)'
@@ -101,13 +108,11 @@ class XNotify {
     } else {
       container.prepend(element)
     }
-
     let opacity = 0.05
     const animation = setInterval(() => {
       opacity += 0.05
-      notification.style.opacity = opacity
-      if (opacity >= 1) {
-        notification.style.opacity = 1
+      notification.style.opacity = Math.min(opacity, 1.0)
+      if (opacity >= 1.0) {
         clearInterval(animation)
       }
     }, 10)
@@ -125,7 +130,7 @@ class XNotify {
     let opacity = 1
     const animation = setInterval(() => {
       opacity -= 0.05
-      notification.style.opacity = opacity
+      notification.style.opacity = Math.max(opacity, 0.0)
       if (opacity <= 0) {
         element.remove()
         clearInterval(animation)
@@ -136,7 +141,7 @@ class XNotify {
       container.style.height = 'auto'
     }
 
-    if (this.empty(container.innerHTML)) {
+    if (!container.innerHTML) {
       container.remove()
     }
   }
@@ -150,48 +155,9 @@ class XNotify {
     }
   }
 
-  generateID () {
-    let id = this.epoch() + '-' + this.shuffle(this.epoch())
-
-    if (this.empty(document.getElementById('x-notify-container').innerHTML)) {
-      return id
-    }
-
-    let invalid = true
-
-    while (invalid) {
-      if (document.getElementById(id)) {
-        id = this.epoch() + '-' + this.shuffle(this.epoch())
-      } else {
-        invalid = false
-        break
-      }
-    }
-
-    return id
-  }
-
-  shuffle (string) {
-    const parts = string.toString().split('')
-    for (let i = parts.length; i > 0;) {
-      const random = parseInt(Math.random() * i)
-      const temp = parts[--i]
-      parts[i] = parts[random]
-      parts[random] = temp
-    }
-    return parts.join('')
-  }
-
-  epoch () {
-    const date = new Date()
-    const time = Math.round(date.getTime() / 1000)
-    return time
-  }
-
-  empty (value) {
-    if (value === null || typeof value === 'undefined' || value.toString().trim() === '') {
-      return true
-    }
-    return false
+  uuidv4 () { // see https://gist.github.com/jed/982883
+    return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c =>
+      (c ^ window.crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+    )
   }
 }
