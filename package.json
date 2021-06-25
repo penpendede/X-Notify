@@ -1,0 +1,27 @@
+{
+  "name": "x-notify-penpendede",
+  "version": "1.0.0",
+  "description": "JavaScriptNotification based on original X-Notify",
+  "main": "x-notify.js",
+  "scripts": {
+    "minify": "minify x-notify.js > x-notify.min.js && minify x-notify.css > x-notify.min.css"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/penpendede/X-Notify.git"
+  },
+  "keywords": [
+    "notification",
+    "JavaScript",
+    "Toast"
+  ],
+  "author": "Josef Schugt",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/penpendede/X-Notify/issues"
+  },
+  "homepage": "https://github.com/penpendede/X-Notify#readme",
+  "devDependencies": {
+    "minify": "^7.0.2"
+  }
+}
