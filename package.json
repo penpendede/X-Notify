@@ -4,7 +4,8 @@
   "description": "JavaScriptNotification based on original X-Notify",
   "main": "x-notify.js",
   "scripts": {
-    "build": "minify x-notify.js > x-notify.min.js && lessc x-notify.less > x-notify.css && minify x-notify.css > x-notify.min.css"
+    "build": "minify x-notify.js > x-notify.min.js && lessc x-notify.less > x-notify.css && minify x-notify.css > x-notify.min.css",
+    "build-dist": "npm run build && copyfiles x-notify.css x-notify.js x-notify.min.* dist"
   },
   "repository": {
     "type": "git",
@@ -22,6 +23,7 @@
   },
   "homepage": "https://github.com/penpendede/X-Notify#readme",
   "devDependencies": {
+    "copyfiles": "^2.4.1",
     "less": "^4.1.1",
     "minify": "^7.0.2"
   }
