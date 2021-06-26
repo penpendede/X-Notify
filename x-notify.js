@@ -3,7 +3,7 @@
 * Portfolio: https://www.xtrendence.dev
 * GitHub: https://www.github.com/Xtrendence
 */
-class XNotify {
+export default class XNotify {
   constructor (position) {
     this.position = position || 'TopRight'
 
