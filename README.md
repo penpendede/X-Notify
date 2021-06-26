@@ -1,91 +1,90 @@
-# X:/Notify
+# X:/Notify (penpendede version)
 
-The main goal of this library is to provide developers with a good looking notification system with a single ".js" file. All the styling and such would be included in that file.
+This project is based on the original notification system by  **X:/Notify** by Xtrendence but follows a slightly
+different approach. Instead of having just a single JavaScript file it uses JavaScript and less. The latter does
+almost all the styling. Both files together are even smaller than the original single file.
 
-The [minified version](https://github.com/Xtrendence/X-Notify/blob/main/x-notify.min.js) is only 4.71 KBs, whereas the [normal one](https://github.com/Xtrendence/X-Notify/blob/main/x-notify.js) is 6.9 KBs.
+| component(s) | size (plain) | size (minified) |
+| ------------ | ------------ | --------------- |
+| CSS          | 1709 Bytes   | 1410 Bytes      |
+| JavaScript   | 3899 Bytes   | 2310 Bytes      |
+| all          | 5608 Bytes   | 3720 Bytes      |
 
-### Demo
+As far as the interface is concerned there is one major change: Instead of `success`,  `error`, `alert`, and `info`
+there only is `display` - the kind of output is controlled by the optional second parameter that defaults to `'info'`.
+In addition to this the style options no longer exists - as far as notifications are concerned I prefer consistency
+over more freedom how they are displayed.
+## Installation
 
-You can test this out here: 
+To add X-Notify to a web page, you need to include **x-notify.js** and **x-notify.css** (alternatively
+**x-notify.min.js** and **x-notify.min.css**), i.e. use
 
-https://xtrendence.github.io/X-Notify/
+```
+<script src="x-notify.js"></script>
+<link rel="stylesheet" href="x-notify.css" type="text/css">
+```
 
-### Installation
+or similar.
 
-Put "x-notify.js" in a directory such as "assets/js/", and then, in your `<head>` tag:
+## Usage:
 
-````
-<script src="./assets/js/x-notify.js"></script>
-````
+```
+const Notify = new XNotify('TopLeft');
+```
 
-### Usage:
-
-````
-const Notify = new XNotify("TopLeft");
-````
-````
-Notify.success({ 
-	title: "Title", 
-	description: "Description", 
-	duration: 4000 
-});
-````
+```
+Notify.display({
+	title: 'Title',
+	description: 'Description',
+	duration: 4000
+},
+'success');
+```
 
 The above would show a notification on the top right of the screen and it'd stay there for 4 seconds before disappearing. There are quite a few options you can change, such as:
 
-````
-Notify.error({
-	width: "300px",
-	title: "Failed to Upload File",
-	description: "The file you submitted couldn't be uploaded.",
-	duration: 4000,
-	background: "rgb(200,50,0)",
-	color: "rgb(255,255,255)"
-});
-````
+```
+Notify.display({
+	title: 'Failed to Upload File',
+	description: 'The file you submitted couldn't be uploaded.',
+	duration: 4000
+},
+'error');
+```
 
-There are 4 different notification types: "success", "error", "alert", and "info", all of which can be used like so:
+There are 4 different notification types: 'success', 'error', 'alert', and 'info', all of which can be used in the following manner:
 
-````
-Notify.success();
-Notify.error();
-Notify.alert();
-Notify.info();
-````
-
-By default, each type has a different and appropriate background and font color, though they can all be changed as shown above.
+```
+Notify.display(options, 'success');
+Notify.display(options, 'error');
+Notify.display(options, 'allert');
+Notify.display(options, 'info'); // alternatively just 'Notify.display(options)'
+```
 
 Here's a list of all the options you can use, and acceptable values:
 
-|Option|Type|Value|Description|
-|------|----|-----|-----------|
-|position|String|"TopRight", "BottomRight", "BottomLeft", "TopLeft"|Where the notification popup would appear (this is passed to the constructor).|
-|width|String|Any integer with "px", such as "100px".|The width of the notification.|
-|borderRadius|String|Any integer with "px", such as "20px".|The border radius of the notification.|
-|title|String|Usually, some short text.|The title of the notification; something like "Upload Error", or "Form Submitted".|
-|description|String|A longer description of the event.|A description of the event the notification was shown for.|
-|duration|Integer|Any integer.|The duration, in milliseconds, that the notification would stay on screen for.|
-|background|String|"rgb(r,g,b)", "rgba(r,g,b,a)", "#RRGGBB"|The color of the background of the notification. Can be any RGB, RGBA, or hex value.|
-|color|String|"rgb(r,g,b)", "rgba(r,g,b,a)", "#RRGGBB"|The color of the font of the notification. Can be any RGB, RGBA, or hex value.|
+| Option       | Type    | Value                                              | Description                                                                          |
+| ------------ | ------- | -------------------------------------------------- | ------------------------------------------------------------------------------------ |
+| position     | String  | 'TopRight', 'BottomRight', 'BottomLeft', 'TopLeft' | Where the notification popup would appear (this is passed to the constructor).       |
+| title        | String  | Usually, some short text.                          | The title of the notification; something like 'Upload Error', or 'Form Submitted'.   |
+| description  | String  | A longer description of the event.                 | A description of the event the notification was shown for.                           |
+| duration     | Integer | Any integer.                                       | The duration, in milliseconds, that the notification would stay on screen for.       |
 
 A full example with a button click event listener, and a fully custom notification:
 
-````
-document.addEventListener("DOMContentLoaded", () => {
+```
+document.addEventListener('DOMContentLoaded', () => {
 	const Notify = new XNotify();
 
-	let custom = document.getElementById("custom");
+	let custom = document.getElementById('custom');
 
-	custom.addEventListener("click", () => {
-		Notify.info({
-			width: "300px",
-			borderRadius: "4px",
-			title: "Customized Notification",
-			description: "Description of the notification.",
-			duration: 10000,
-			background: "rgb(0,0,30)",
-			color: "rgb(0,200,255)"
-		});
+	custom.addEventListener('click', () => {
+		Notify.display({
+			title: 'Customized Notification',
+			description: 'Description of the notification.',
+			duration: 10000
+		},
+		'info');
 	});
 });
-````
+```
