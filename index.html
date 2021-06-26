@@ -13,27 +13,27 @@
 
     .wrapper {
       height: calc((40px * 4) + (20px * 3));
-      width: 180px;
+      left: calc(50% - 180px / 2);
       position: absolute;
       top: calc(50% - (40px * 4) + (20px * 3) / 2);
-      left: calc(50% - 180px / 2)
+      width: 180px;
     }
 
     .wrapper button {
       background: rgb(0, 150, 255);
       border: none;
-      outline: none;
+      border-radius: 10px;
+      color: rgb(255, 255, 255);
       cursor: pointer;
-      padding: 0 10px 0 10px;
-      height: 40px;
-      width: 180px;
+      display: block;
       font-size: 18px;
       font-weight: bold;
-      color: rgb(255, 255, 255);
-      border-radius: 10px;
-      display: block;
+      height: 40px;
       margin: 0 auto 20px auto;
+      outline: none;
+      padding: 0 10px 0 10px;
       transition: background 0.25s;
+      width: 180px;
     }
 
     .wrapper button:hover {
@@ -61,28 +61,23 @@
         'success');
       });
 
-      error.addEventListener("click", () => {
-        Notify.display({
-          title: "Some Error",
-          description: "Description of said error."
-        },
-        "error");
-      });
+      error.addEventListener("click", () => Notify.display({
+        title: "Some Error",
+        description: "Description of said error."
+      },
+      "error"));
 
-      alert.addEventListener("click", () => {
-        Notify.display({
-          title: "Just a Warning",
-          description: "Description of the alert or warning.",
-        },
-        "alert");
-      });
+      alert.addEventListener("click", () => Notify.display({
+        title: "Just a Warning",
+        description: "Description of the alert or warning.",
+      },
+      "alert"));
 
-      info.addEventListener("click", () => {
-        Notify.display({
-          title: "Just Some Info",
-          description: "Longer version of the information."
-        });
-      });
+      info.addEventListener("click", () => Notify.display({
+        title: "Just Some Info",
+        description: "Longer version of the information."
+      }));
+
       clear.addEventListener("click", () => Notify.clear());
     });
   </script>
