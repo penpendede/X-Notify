@@ -29,35 +29,20 @@ class XNotify {
   }
 
   setOptions (options, type) {
-    ['width', 'title', 'description', 'duration'].forEach(name => {
-      if (name in options) {
-        this[name] = options[name]
-      } else if (type in this.defaults && name in this.defaults[type]) {
-        this[name] = this.defaults[type][name]
-      } else {
-        this[name] = this.defaults[name]
-      }
+    ['title', 'description', 'duration'].forEach(name => {
+      this[name] = (name in options)
+        ? options[name]
+        : (
+            (type in this.defaults && name in this.defaults[type])
+              ? this.defaults[type][name]
+              : this.defaults[name]
+          )
     })
     this.type = type || 'info'
   }
 
-  success (options) {
-    this.setOptions(options, 'success')
-    this.showNotification(this.createElement())
-  }
-
-  error (options) {
-    this.setOptions(options, 'error')
-    this.showNotification(this.createElement())
-  }
-
-  alert (options) {
-    this.setOptions(options, 'alert')
-    this.showNotification(this.createElement())
-  }
-
-  info (options) {
-    this.setOptions(options, 'info')
+  display (options, type) {
+    this.setOptions(options, type)
     this.showNotification(this.createElement())
   }
 
@@ -81,7 +66,9 @@ class XNotify {
     notification.classList.add(this.type)
 
     notification.innerHTML = [
-      '<span class="title" class="' + this.type + '">',
+      '<span class="title" class="',
+      this.type,
+      '">',
       this.title,
       '</span>',
       '<span class="description">',
@@ -94,6 +81,21 @@ class XNotify {
     return row
   }
 
+  opacityChanger (element, from, to, step) {
+    let opacity = from + step
+    const animation = setInterval(() => {
+      opacity += step
+      if (element) {
+        element.style.opacity = from < to ? Math.min(opacity, to) : Math.max(opacity, to)
+        if (from < to ? opacity >= to : opacity <= to) {
+          clearInterval(animation)
+        }
+      } else {
+        clearInterval(animation)
+      }
+    }, 10)
+  }
+
   showNotification (element) {
     const container = document.getElementById('x-notify-container')
 
@@ -101,57 +103,32 @@ class XNotify {
 
     if (['BottomRight', 'BottomLeft'].indexOf(this.position) > -1) {
       container.append(element)
-      if (container.scrollHeight > window.innerHeight) {
-        container.style.height = 'calc(100% - 20px)'
-      }
+      container.scrollHeight <= window.innerHeight || (container.style.height = 'calc(100% - 20px)')
       container.scrollTo(0, container.scrollHeight)
     } else {
       container.prepend(element)
     }
-    let opacity = 0.05
-    const animation = setInterval(() => {
-      opacity += 0.05
-      notification.style.opacity = Math.min(opacity, 1.0)
-      if (opacity >= 1.0) {
-        clearInterval(animation)
-      }
-    }, 10)
+    this.opacityChanger(notification, 0, 1, 0.05)
 
-    setTimeout(() => {
-      this.hideNotification(element)
-    }, this.duration)
+    setTimeout(() => this.hideNotification(element), this.duration)
   }
 
   hideNotification (element) {
     const container = document.getElementById('x-notify-container')
+    this.opacityChanger(element, 1, 0, -0.05)
 
-    const notification = element.getElementsByClassName('x-notification')[0]
-
-    let opacity = 1
-    const animation = setInterval(() => {
-      opacity -= 0.05
-      notification.style.opacity = Math.max(opacity, 0.0)
-      if (opacity <= 0) {
-        element.remove()
-        clearInterval(animation)
-      }
-    }, 10)
-
-    if (container.scrollHeight <= window.innerHeight) {
-      container.style.height = 'auto'
-    }
-
-    if (!container.innerHTML) {
-      container.remove()
-    }
+    container.scrollHeight > window.innerHeight || (container.style.height = 'auto')
+    container.innerHTML || container.remove()
   }
 
   clear () {
     const container = document.getElementById('x-notify-container')
-    const notifications = container.getElementsByClassName('x-notification')
+    if (container) {
+      const notifications = container.getElementsByClassName('x-notification')
 
-    for (let i = 0; i < notifications.length; i++) {
-      this.hideNotification(notifications[i])
+      for (let i = 0; i < notifications.length; i++) {
+        this.hideNotification(notifications[i])
+      }
     }
   }
 
