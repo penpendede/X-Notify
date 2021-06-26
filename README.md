@@ -34,9 +34,9 @@ const Notify = new XNotify('TopLeft');
 
 ```
 Notify.display({
-	title: 'Title',
-	description: 'Description',
-	duration: 4000
+  title: 'Title',
+  description: 'Description',
+  duration: 4000
 },
 'success');
 ```
@@ -45,9 +45,9 @@ The above would show a notification on the top right of the screen and it'd stay
 
 ```
 Notify.display({
-	title: 'Failed to Upload File',
-	description: 'The file you submitted couldn't be uploaded.',
-	duration: 4000
+  title: 'Failed to Upload File',
+  description: 'The file you submitted couldn't be uploaded.',
+  duration: 4000
 },
 'error');
 ```
@@ -74,17 +74,17 @@ A full example with a button click event listener, and a fully custom notificati
 
 ```
 document.addEventListener('DOMContentLoaded', () => {
-	const Notify = new XNotify();
+  const Notify = new XNotify();
 
-	let custom = document.getElementById('custom');
+  let custom = document.getElementById('custom');
 
-	custom.addEventListener('click', () => {
-		Notify.display({
-			title: 'Customized Notification',
-			description: 'Description of the notification.',
-			duration: 10000
-		},
-		'info');
-	});
+  custom.addEventListener('click', () => {
+    Notify.display({
+      title: 'Customized Notification',
+      description: 'Description of the notification.',
+      duration: 10000
+    },
+    'info');
+  });
 });
 ```
