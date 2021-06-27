@@ -7,8 +7,8 @@ almost all the styling. Both files together are even smaller than the original s
 | component(s) | size (plain) | size (minified) |
 | ------------ | ------------ | --------------- |
 | CSS          | 1709 Bytes   | 1410 Bytes      |
-| JavaScript   | 3899 Bytes   | 2310 Bytes      |
-| all          | 5608 Bytes   | 3720 Bytes      |
+| JavaScript   | 3914 Bytes   | 2325 Bytes      |
+| all          | 5623 Bytes   | 3735 Bytes      |
 
 As far as the interface is concerned there is one major change: Instead of `success`,  `error`, `alert`, and `info`
 there only is `display` - the kind of output is controlled by the optional second parameter that defaults to `'info'`.
@@ -57,7 +57,7 @@ There are 4 different notification types: 'success', 'error', 'alert', and 'info
 ```
 Notify.display(options, 'success');
 Notify.display(options, 'error');
-Notify.display(options, 'allert');
+Notify.display(options, 'alert');
 Notify.display(options, 'info'); // alternatively just 'Notify.display(options)'
 ```
 
