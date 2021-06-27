@@ -16,6 +16,9 @@ In addition to this the style options no longer exists - as far as notifications
 over more freedom how they are displayed.
 ## Installation
 
+**Important** My version of X-Notify is intended to be used with a builder like ``esbuild``. You can however still use
+it in the following manner provided that you remove the ``export default`` from the beginning of the code:
+
 To add X-Notify to a web page, you need to include **x-notify.js** and **x-notify.css** (alternatively
 **x-notify.min.js** and **x-notify.min.css**), i.e. use
 
